@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Workflow Exchange</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F4F6F5; --paper:#FFFFFF; --ink:#18201F; --muted:#56615F; --rule:#D5DCDA;
+  --accent:#1F6F63; --accent-soft:#E0EFEC;
+  --unreal:#3B4FB8; --unreal-soft:#E6E9F8; --godot:#B5611E; --godot-soft:#F7EADF;
+  --warn:#9A3B2E; --warn-soft:#F6E4E1;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", Consolas, ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111615; --paper:#182120; --ink:#E6ECEA; --muted:#9DAAA7; --rule:#2C3836;
+    --accent:#5CC0AE; --accent-soft:#17312D;
+    --unreal:#9AA8F2; --unreal-soft:#1D2340; --godot:#E7A36B; --godot-soft:#34241A;
+    --warn:#E99587; --warn-soft:#3A1F1B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111615; --paper:#182120; --ink:#E6ECEA; --muted:#9DAAA7; --rule:#2C3836;
+  --accent:#5CC0AE; --accent-soft:#17312D;
+  --unreal:#9AA8F2; --unreal-soft:#1D2340; --godot:#E7A36B; --godot-soft:#34241A;
+  --warn:#E99587; --warn-soft:#3A1F1B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:17px/1.6 var(--body);padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:860px;margin:0 auto}
+header{padding-block:48px 28px;border-bottom:1px solid var(--rule);margin-bottom:8px}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font:700 clamp(34px,6vw,54px)/1.05 var(--display);margin:14px 0 12px;text-wrap:balance;letter-spacing:-.01em}
+.lede{font-size:19px;color:var(--muted);max-width:62ch;margin:0}
+.sides{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.side{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;font:600 14px/1.2 var(--body)}
+.side.u{background:var(--unreal-soft);color:var(--unreal)} .side.g{background:var(--godot-soft);color:var(--godot)}
+.side.x{background:var(--accent-soft);color:var(--accent)}
+.dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+h2{font:700 26px/1.2 var(--display);margin:48px 0 12px;text-wrap:balance}
+h3{font:600 18px/1.3 var(--body);margin:26px 0 6px}
+p,li{max-width:66ch}
+section p{margin:0 0 12px}
+ul,ol{padding-left:22px;margin:0 0 12px} li{margin:4px 0}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
+.panel{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:18px 20px}
+.panel h3{margin-top:0}
+.panel.no{border-color:var(--warn);background:var(--warn-soft)}
+.panel.no h3{color:var(--warn)}
+.panel.yes h3{color:var(--accent)}
+.panel ul{margin:0}
+code,.mono{font-family:var(--mono);font-size:.88em}
+pre.tree{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;overflow-x:auto;font:13.5px/1.55 var(--mono);color:var(--ink);margin:12px 0}
+.tree .c{color:var(--muted)}
+.diagram{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:16px;overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+.tablewrap{overflow-x:auto;background:var(--paper);border:1px solid var(--rule);border-radius:10px;margin:14px 0}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:600 12px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--ground)}
+tr:last-child td{border-bottom:0}
+.tag{display:inline-block;font:500 11.5px/1 var(--mono);padding:4px 7px;border-radius:5px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+.tag.u{background:var(--unreal-soft);color:var(--unreal)} .tag.g{background:var(--godot-soft);color:var(--godot)}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;position:relative;padding-left:44px;margin:14px 0;max-width:none}
+.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--paper);font:700 15px/30px var(--display);text-align:center}
+.steps b{display:block}
+.q{background:var(--paper);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:6px;padding:12px 16px;margin:10px 0}
+.q b{display:block;margin-bottom:2px}
+.q .opts{color:var(--muted);font-size:15.5px}
+.note{font-size:15px;color:var(--muted)}
+footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted)}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Plan for review &middot; 2026-09-26</div>
+  <h1>Workflow Exchange</h1>
+  <p class="lede">A shared second memory for two AI-team setups. Each of us keeps our own workflow; the exchange lets us compare them, see what the other has learned, and borrow what's useful without merging anything.</p>
+  <div class="sides">
+    <span class="side u"><span class="dot"></span>Shelton &middot; Unreal Engine</span>
+    <span class="side g"><span class="dot"></span>Partner &middot; Godot</span>
+    <span class="side x"><span class="dot"></span>Shared: how to run an AI team well</span>
+  </div>
+</header>
+
+<section>
+  <h2>Why this is worth building</h2>
+  <p>We both run a team of AIs through the same kind of setup: a lead AI, several helper AIs, a task board, shared memory, skills, and a local dashboard (WorkFlowHQ on Shelton's side). Our projects are different, but most of what makes the team work is not engine-specific: how tasks are sized and routed, which model is worth its cost, which checks catch bugs before a compile, what went wrong and how it was fixed.</p>
+  <p>Today that knowledge stays on each PC. When one of us learns something the hard way (for example, that a model benchmark run in parallel ate 15% of a paid usage window), the other has to learn it again. The exchange fixes that.</p>
+  <p>Both setups started from the same AI team kit, so the folders and file formats already match. Comparing them is mostly a matter of lining up files, not translating between systems.</p>
+</section>
+
+<section>
+  <h2>What travels, and what never does</h2>
+  <div class="split">
+    <div class="panel yes">
+      <h3>Shared (know-how)</h3>
+      <ul>
+        <li><b>Skills</b>: the instruction files that make the AIs good at a job (<code>.claude/skills/*</code>).</li>
+        <li><b>Measured lessons</b> from shared memory: what was tried, what was measured, what changed.</li>
+        <li><b>Model results</b>: which model won on which kind of task, at what cost.</li>
+        <li><b>Workflow rules</b> and the reason behind each one.</li>
+        <li><b>Tools and scripts</b> that aren't tied to one project (routing, wake-ups, the dashboard).</li>
+      </ul>
+    </div>
+    <div class="panel no">
+      <h3>Never shared</h3>
+      <ul>
+        <li>Project source code and game assets.</li>
+        <li>Logins, tokens, API keys, account emails, session IDs.</li>
+        <li>Chat history and task transcripts.</li>
+        <li>Anything outside the curated pack: the exchange can't read your PC, only what you publish.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>How it works</h2>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  A["Shelton's workflow"] -- "publish pack" --> X[("Exchange repo<br/>private, on GitHub")]
+  B["Partner's workflow"] -- "publish pack" --> X
+  X -- "pull" --> CA["Compare tab<br/>in Shelton's WorkFlowHQ"]
+  X -- "pull" --> CB["Compare tab<br/>in Partner's dashboard"]
+  CA -- "import, opt-in" --> PA["Peer memory<br/>advice only"]
+  PA -- "promote, with approval" --> A
+</pre>
+  </div>
+  <ol class="steps">
+    <li><b>Publish a pack.</b> A command (and a button in the dashboard) collects the shareable files from your setup, removes anything that looks like a secret, shows you the list, and only publishes after you confirm. Each pack is a dated snapshot.</li>
+    <li><b>The exchange repo holds both packs.</b> One small private GitHub repo that only the two of you can access. Each person writes only to their own folder.</li>
+    <li><b>Compare.</b> A Compare tab lines up the two packs: skills one side has and the other doesn't, rules that differ on the same topic, and each side's measured lessons, filterable by domain.</li>
+    <li><b>Import into peer memory.</b> You pick items to bring over. They land in a separate peer memory layer, labeled with where they came from. Your AIs can read it as advice.</li>
+    <li><b>Promote what proves itself.</b> When a borrowed skill or rule works for you, you promote it into your own workflow. That step always needs your approval.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>What a pack looks like</h2>
+  <p>A plain folder of text files, so it's easy to read, diff and review on GitHub:</p>
+<pre class="tree">workflow-exchange/
+  shelton/                       <span class="c"># only Shelton writes here</span>
+    pack.json                    <span class="c"># date, domains, kit version, item list</span>
+    skills/
+      team-health/SKILL.md       <span class="c"># general</span>
+      ue-build/SKILL.md          <span class="c"># unreal</span>
+    lessons.md                   <span class="c"># measured lessons, one per line, with date and domain</span>
+    models.md                    <span class="c"># model results: task, models, winner, cost</span>
+    rules.md                     <span class="c"># workflow rules and their reasons</span>
+    tools/                       <span class="c"># portable scripts, if chosen</span>
+  partner/                       <span class="c"># only the partner writes here</span>
+    ...</pre>
+  <p>Every item carries a <span class="tag">general</span>, <span class="tag u">unreal</span> or <span class="tag g">godot</span> label, so the Compare tab can show "general" lessons first and keep engine-specific ones out of the way until you want them.</p>
+</section>
+
+<section>
+  <h2>The rules for peer memory</h2>
+  <ul>
+    <li><b>Advice, never orders.</b> Your own rules always win. A borrowed item can inform an AI's work but never overrides CLAUDE.md, your skills, or your decisions.</li>
+    <li><b>Always labeled.</b> Every peer item shows who it came from and when, so nobody mistakes it for a rule of yours.</li>
+    <li><b>Measured beats claimed.</b> Items that record a measurement ("took 72 s", "used 719k tokens") are marked as measured; opinions are marked as opinions.</li>
+    <li><b>Easy to drop.</b> Removing an imported item is one click and leaves no trace in your own workflow.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Privacy and safety</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Risk</th><th>How the design handles it</th></tr></thead>
+    <tbody>
+      <tr><td>A token or key slips into a pack</td><td>The pack builder scans for key-like strings, emails and account IDs and refuses to publish until they're removed. You review the full list before anything leaves the PC.</td></tr>
+      <tr><td>Someone else reads the exchange</td><td>A private GitHub repo with exactly two members. Nothing is public.</td></tr>
+      <tr><td>One side overwrites the other</td><td>Each person writes only their own folder; the exchange tool refuses to write the other one.</td></tr>
+      <tr><td>A borrowed rule breaks a workflow</td><td>Imports land in peer memory as advice. Nothing reaches your real workflow without a promote step you approve.</td></tr>
+      <tr><td>Hidden behavior in shared scripts</td><td>Scripts are plain text, reviewed on GitHub before import, and never run automatically after an import.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Build plan</h2>
+  <p>Four tasks, built by the AI team the usual way (plan, build, review, test). Each one is usable on its own.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Task</th><th>What it delivers</th><th>Size</th></tr></thead>
+    <tbody>
+      <tr><td><b>1. Pack builder</b></td><td>A command that gathers skills, lessons, model results and rules into a pack, labels domains, scans for secrets, and shows the list for approval.</td><td><span class="tag">M</span></td></tr>
+      <tr><td><b>2. Exchange repo + publish</b></td><td>The private repo layout, publish and pull commands, and the "write only your own folder" guard.</td><td><span class="tag">S</span></td></tr>
+      <tr><td><b>3. Compare tab</b></td><td>A WorkFlowHQ tab: skills side by side, differing rules, lessons by domain, a diff view for any file.</td><td><span class="tag">M</span></td></tr>
+      <tr><td><b>4. Peer memory</b></td><td>Import into a labeled advice layer the AIs can read, one-click removal, and a promote step with approval.</td><td><span class="tag">M</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">The partner's dashboard may differ from WorkFlowHQ. Tasks 1, 2 and 4 are plain files and commands that work on any kit-based setup; task 3 is the only dashboard-specific part, and the same Compare view can be added to the partner's side later.</p>
+</section>
+
+<section>
+  <h2>Decisions for the two of you</h2>
+  <div class="q"><b>Who owns the exchange repo?</b><span class="opts">Either account can create it and invite the other. The owner can't read anything the other didn't publish.</span></div>
+  <div class="q"><b>How often do packs publish?</b><span class="opts">Manual only (recommended to start), or on a schedule with a review prompt.</span></div>
+  <div class="q"><b>Which domains count as "general"?</b><span class="opts">Suggested: team workflow, model choice and cost, review and testing habits, tooling. Engine topics stay labeled by engine.</span></div>
+  <div class="q"><b>Can AIs read peer memory on their own?</b><span class="opts">Only the lead AI (recommended), or every AI on the team, or nobody until you import by hand.</span></div>
+  <div class="q"><b>Are scripts shared, or only knowledge?</b><span class="opts">Knowledge only to start is the safer choice; scripts can be added once you both trust the flow.</span></div>
+</section>
+
+<footer>Drafted by Claude (lead AI on Shelton's team) for Shelton and his partner. Nothing is built yet; this page is the proposal to agree on first.</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"default"});</script>
+</body>
+</html>
